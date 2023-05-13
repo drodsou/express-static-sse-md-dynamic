@@ -3,6 +3,8 @@ import fsProm from 'fs/promises'
 import frontMatter from 'front-matter';
 import {marked} from 'marked';
 
+import layout from '#root/server/comp/layout.js';
+
 const __dirname = new URL('.', import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'); 
 
 /** @type {(d:string) => string[]} */
@@ -11,10 +13,9 @@ const dir = (d) => fs.readdirSync(d, {withFileTypes:true})
   .flat();
 
 const pages = dir(__dirname + 'pages')
-console.log(pages)
 
 export default async function dynamicPages (req,res,next) {
-  console.log('dyn', req.originalUrl)
+
     // -- find file
     let filePattern = __dirname + 'pages' + req.originalUrl;
     if (filePattern.endsWith('/')) { filePattern = filePattern.slice(0,-1); }
@@ -39,13 +40,15 @@ export default async function dynamicPages (req,res,next) {
       Object.keys(fm.attributes).forEach(attr=>{
         fm.body = fm.body.replace(new RegExp(`{${attr}}`,'g'),fm.attributes[attr]);
       });
-      result = `<!DOCTYPE html><html lang="en"><head><title>${fm.attributes.title}</title></head><body>${marked.parse(fm.body)}</body></html>`;
+      // TODO: use comp/layout
+      // result = `<!DOCTYPE html><html lang="en"><head><title>${fm.attributes.title}</title></head><body>${marked.parse(fm.body)}</body></html>`;
+      result = layout({title:fm.attributes.title, body: marked.parse(fm.body)})
     } else {
       // -- .html.js or .json.js
       // delete require.cache[require.resolve(file)];
       // let pageFn = (await import('file://' + file + '?' + Date.now() )).default; // + '?' +  Date.now()).default;
       let pageFn = (await import('file://' + file)).default; // + '?' +  Date.now()).default;
-      result = pageFn({req,props:'serverProps'});
+      result = await pageFn({req,props:'serverProps'});
     }
 
     // -- send result

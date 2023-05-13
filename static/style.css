@@ -1,0 +1,12 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+}
+
+nav a, nav:visited {
+  color: yellow;
+  text-decoration: none;
+  margin-right: 10px;
+}
+

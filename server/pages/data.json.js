@@ -1,8 +1,9 @@
-export default function page ({req, props}) {
+export default async function page ({req, props}) {
 
-  return JSON.stringify({
-    uno: 1,
-    dos: 2
-  }, null, 2);
+  // -- fake db call
+  let data = await new Promise (r=>setTimeout(()=>r({uno:1, dos:2}),1000))
+
+  return JSON.stringify(data, null, 2);
+
 
 }

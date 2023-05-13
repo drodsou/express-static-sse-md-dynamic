@@ -1,24 +1,17 @@
-export default function page ({req, props}) {
+import layout from '#root/server/comp/layout.js';
+export default async function page ({req, props}) {
 
   const someVar = "someVar"
 
-  return /*html*/`
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Dynamic 5</h1>
+  return layout({title:'Dyn', body:`
+  <h1>Dynamic 5</h1>
 
-    Var: ${someVar}
-    Props: ${props}
-    
-  </body>
-  </html>
-  
-  `;
+  Var: ${someVar}
+  Props: ${props}
+
+  <button onclick="this.innerText = parseInt(this.innerText)+1">1</button>
+
+  <img src="/img/img1.jpg">
+  `});
+
 }
