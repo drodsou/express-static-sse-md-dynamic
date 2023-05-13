@@ -1,4 +1,4 @@
-module.exports = function page ({req, props}) {
+export default function page ({req, props}) {
 
   return JSON.stringify({
     uno: 1,

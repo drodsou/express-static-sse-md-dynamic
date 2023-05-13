@@ -1,12 +1,13 @@
 {
   "name": "express-static-sse-md-dynamic",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
+    "dev": "node --watch server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "@drodsou",
   "license": "ISC",
   "dependencies": {
     "compression": "^1.7.4",
@@ -14,5 +15,9 @@
     "front-matter": "^4.0.2",
     "marked": "^4.0.12",
     "sirv": "^2.0.2"
+  },
+  "type" :"module",
+  "imports": {
+    "#root/*": "./*"
   }
 }

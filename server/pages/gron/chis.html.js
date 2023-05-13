@@ -1,4 +1,4 @@
-module.exports = function page ({req, props}) {
+export default function page ({req, props}) {
 
   const someVar = "someVar"
 
@@ -12,7 +12,7 @@ module.exports = function page ({req, props}) {
     <title>Document</title>
   </head>
   <body>
-    <h1>Dynamic 2</h1>
+    <h1>gron/chis 1</h1>
 
     Var: ${someVar}
     Props: ${props}
