@@ -1,28 +1,32 @@
-import fs from 'fs';
 import fsProm from 'fs/promises'
 import frontMatter from 'front-matter';
 import {marked} from 'marked';
 
 import layout from '#root/server/comp/layout.js';
 
-const __dirname = new URL('.', import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'); 
+import {dir} from '#root/server/lib/dirutil.js';
+const pagesDir = process.cwd() +  '/server/pages';
+const pagesFiles = dir(pagesDir)
 
-/** @type {(d:string) => string[]} */
-const dir = (d) => fs.readdirSync(d, {withFileTypes:true})
-  .map(f=>f.isDirectory() ? dir(d + '/' + f.name) : d + '/' + f.name)
-  .flat();
-
-const pages = dir(__dirname + 'pages')
+const dynExtensions = ['.html.js', '/index.html.js', '.json.js', '/index.json.js', '.md', '/index.md']
 
 export default async function dynamicPages (req,res,next) {
-
     // -- find file
-    let filePattern = __dirname + 'pages' + req.originalUrl;
+    // let filePattern = pagesDir + req.originalUrl;
+    let filePattern = pagesDir + req.path;
     if (filePattern.endsWith('/')) { filePattern = filePattern.slice(0,-1); }
-    let extensions = ['.html.js', '/index.html.js', '.json.js', '/index.json.js', '.md', '/index.md']
+    // console.log('filePattern', filePattern)
     let file;
-    for (let ext of extensions) {
-      if (pages.includes(filePattern + ext)) {
+    for (let ext of dynExtensions) {
+      
+      // -- prevent static download of files with dynamic extensions (server side code)
+      if (filePattern.endsWith(ext)) {
+        return res.sendStatus(404).end()
+      }
+
+      // -- normal dynamic process, try each extension
+      if (pagesFiles.includes(filePattern + ext)) {
+        
       // if (fs.existsSync(filePattern + ext)) {
         file = filePattern + ext;
         break;
@@ -48,12 +52,12 @@ export default async function dynamicPages (req,res,next) {
       // delete require.cache[require.resolve(file)];
       // let pageFn = (await import('file://' + file + '?' + Date.now() )).default; // + '?' +  Date.now()).default;
       let pageFn = (await import('file://' + file)).default; // + '?' +  Date.now()).default;
-      result = await pageFn({req,props:'serverProps'});
+      result = await pageFn({req, props:req.query});
     }
 
     // -- send result
     res.writeHeader(200, {"Content-Type": file.includes('.json') ? "application/json" : "text/html"});  
-    res.write(result);  
+    res.write(file.includes('.json') ? JSON.stringify(result,null,2) :  result);  
     res.end();
 
   }

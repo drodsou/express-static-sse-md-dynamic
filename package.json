@@ -10,13 +10,17 @@
   "author": "@drodsou",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^8.3.0",
     "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.17.2",
     "front-matter": "^4.0.2",
+    "helmet": "^7.0.0",
     "marked": "^4.0.12",
     "sirv": "^2.0.2"
   },
-  "type" :"module",
+  "type": "module",
   "imports": {
     "#root/*": "./*"
   }

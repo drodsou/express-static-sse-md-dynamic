@@ -3,10 +3,10 @@ export default function layout (props) {
 <html lang="${props.lang || 'en'}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${props.title || 'Title'}</title>
   <link rel="stylesheet" href="/style.css?${Date.now()}" />
-  <script src="/debug.js"></script>
+  <script src="/js/debug.js"></script>
 </head>
 <body>
 <nav>
@@ -14,8 +14,11 @@ export default function layout (props) {
   <a href="/dyn">DYN</a>
   <a href="/data">DATA</a>
   <a href="/mark">MARK</a>
+  <a href="/database">MARK</a>
 </nav>
  ${props.body}
+
+ <script type="module" src="index.js?${Date.now()}"> </script>
 </body>
 
 </html>
