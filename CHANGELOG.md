@@ -2,6 +2,7 @@
 # TODO
 - post, fetchJson
 - colocated queries client/server sharing types
+- forms
 - login
 - aclarar server/client comp (cascade)
 
