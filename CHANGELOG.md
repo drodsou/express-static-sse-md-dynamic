@@ -1,5 +1,7 @@
 
 # TODO
+- form serverside check only
+
 - post, fetchJson
 - colocated queries client/server sharing types
 - forms
