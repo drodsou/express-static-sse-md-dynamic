@@ -7,6 +7,8 @@
 - aclarar server/client comp (cascade)
 
 # DONE
+- form exploration (partial)
+
 - sqlite
 - trailing slashs redirec, so import 'index.js' work properly in client
 - removed static/ now everything goes on pages (dynamicPages prevents downloading of server code)

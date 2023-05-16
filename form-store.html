@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {background-color: black; color: white; font-family: open sans; }
+    button { border:0; cursor:pointer; }
+    label {
+      display:block;
+      margin-bottom: 20px;
+    }
+    label span {
+      display:block;
+      color: red;
+    }
+    
+  </style>
+  <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-dark.css" media="screen and (prefers-color-scheme: dark)" /> -->
+</head>
+<body>
+  
+  <form>
+    <label>User<span></span>
+      <input name="user" type="email">
+    </label>
+
+    <label>Password<span></span> 
+      <input name="password" type="input"> 
+    </label>
+
+    <input type="submit">
+  </form>
+
+
+
+  <script type="module">
+
+    /*
+    TODO: 
+    - other form elements: select, checks, ranges
+    - the same but server side validation only
+
+    */
+
+   const fs = {
+    ref : {
+      form: document.querySelector('form')
+    },
+    data : {
+      form : {
+        user: '',
+        password: 'p'
+      },
+      visited : {}
+    },
+    view:  {
+      UserError () {
+        if (fs.data.form.user === '')  return 'User cannot be empty'
+      },
+      PasswordError () {
+        if (fs.data.form.password === '')  return 'Password cannot be empty'
+        if (fs.data.form.password.length < 4)  return 'Password must be 4 chars long'
+      }
+    },
+    action: {
+      change(ev) {
+        fs.data.form = Object.assign(Object.fromEntries(new FormData(fs.ref.form)))
+        console.log(fs.data)
+        fs.data.visited[ev.target.name] = true
+        fs.update();
+      },
+      submit (ev) {
+        ev.preventDefault();
+        fs.data.form = Object.assign(Object.fromEntries(new FormData(fs.ref.form)))
+        console.log(fs.data.form)
+        let formErrors = Object.keys(fs.view).filter(k=>k.endsWith('Error')).map(k=>fs.view[k]()).filter(e=>e);
+        
+        Object.keys(fs.data.form).forEach(k=>fs.data.visited[k] = true);
+        fs.update();
+
+        if (formErrors.length) {
+          console.log('cancel send bc errors', formErrors)
+        } else  {
+          console.log('send form', fs.data.form)
+        }
+      }
+
+    },
+
+    update() {
+      Object.keys(fs.view).forEach(vk=>{
+        let dk = vk.replace('Error','').toLowerCase();
+        let dataEl = fs.ref.form.querySelector(`[name="${dk}"]`)
+        let errorEl = dataEl.parentNode.querySelector('span')
+        dataEl.value = fs.data.form[dk]
+        errorEl.innerHTML = (fs.data.visited[dk] && fs.view[vk]()) ? fs.view[vk]() : '';
+      })
+    }
+   }
+
+  //  fs.ref.form.addEventListener('keyup',fs.action.change)
+  fs.ref.form.addEventListener('change',fs.action.change)
+  fs.ref.form.addEventListener('submit', fs.action.submit)
+  fs.update();
+
+  </script>
+
+  
+
+</body>
+</html>
