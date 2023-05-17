@@ -50,8 +50,8 @@ export default async function dynamicPages (req,res,next) {
     } else {
       // -- .html.js or .json.js
       // delete require.cache[require.resolve(file)];
-      // let pageFn = (await import('file://' + file + '?' + Date.now() )).default; // + '?' +  Date.now()).default;
-      let pageFn = (await import('file://' + file)).default; // + '?' +  Date.now()).default;
+      let pageFn = (await import('file://' + file + '?' + Date.now() )).default; // skip cache (no need to reboot server)
+      // let pageFn = (await import('file://' + file)).default; // cache (need to reboot server)
       result = await pageFn({req, props:req.query});
     }
 

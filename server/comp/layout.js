@@ -14,7 +14,9 @@ export default function layout (props) {
   <a href="/dyn">DYN</a>
   <a href="/data">DATA</a>
   <a href="/mark">MARK</a>
-  <a href="/database">MARK</a>
+  <a href="/database">DB</a>
+  <a href="/priv/priv1">PRIVATE!</a>
+  <a href="/auth/logout">LOGOUT</a>
 </nav>
  ${props.body}
 

@@ -8,8 +8,9 @@ import cors from 'cors';
 
 import dynamicPages from './dynamicPages.js';
 import redirectToSlash from '#root/server/lib/redirectToSlash.js';
-
 import {dbConnect} from './db/sqlite/connect.js';
+
+import auth from './auth.js';
 
 dotenv.config()
 const { PORT, NODE_ENV } = process.env;
@@ -27,12 +28,19 @@ const srv = express()
 // -- behind reverse proxy ?
 // app.set('trust proxy', '127.0.0.1');
 // app.use(morgan('dev'))
-srv.use(helmet());
+srv.use(helmet({
+	// -- allow inline scripts (remove for prod and just use script src=...)
+	contentSecurityPolicy: false
+}));
+	
 // srv.use(cors())
 srv.use(express.json())
 srv.use(express.urlencoded({extended: false}))
 // status check
 srv.get('/status', (req,res)=> res.sendStatus(200).end());	
+
+auth(srv)
+
 
 // -- debug
 // srv.use((req,res,next)=>{

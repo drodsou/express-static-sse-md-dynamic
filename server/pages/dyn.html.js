@@ -3,15 +3,15 @@ export default async function page ({req, props}) {
 
   const someVar = "someVar"
 
-  return layout({title:'Dyn', body:`
-  <h1>Dynamic 5</h1>
+  return layout({title:'Dyn', body:/*html*/`
+    <h1>Dynamic 5</h1>
 
-  Var: ${someVar}
-  Props: ${props}
+    Var: ${someVar}
+    Props: ${JSON.stringify(props)}
 
-  <button onclick="this.innerText = parseInt(this.innerText)+1">1</button>
+    <button onclick="this.innerText = parseInt(this.innerText)+1">1</button>
 
-  <img src="/img/img1.jpg">
+    <img src="/img/img1.jpg">
   `});
 
 }

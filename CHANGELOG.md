@@ -7,6 +7,8 @@
 - forms
 - login
 - aclarar server/client comp (cascade)
+- res.sendFile instead of sirv?
+- pag.html.js should become pag.html, not page/ ?
 
 # DONE
 - form exploration (partial)
